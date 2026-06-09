@@ -1,4 +1,4 @@
-import Database from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 
 export interface ColumnInfo {
   cid: number;
@@ -15,26 +15,26 @@ export interface TableInfo {
 }
 
 export class DBService {
-  private db: Database.Database;
+  private db: DatabaseSync;
 
   constructor(dbPath: string) {
-    this.db = new Database(dbPath, { readonly: false }); 
+    this.db = new DatabaseSync(dbPath);
   }
 
   getTables(): TableInfo[] {
     const stmt = this.db.prepare(`
-      SELECT name, type 
-      FROM sqlite_master 
+      SELECT name, type
+      FROM sqlite_master
       WHERE type IN ('table', 'view') AND name NOT LIKE 'sqlite_%'
       ORDER BY name
     `);
-    return stmt.all() as TableInfo[];
+    return stmt.all() as unknown as TableInfo[];
   }
 
   getTableSchema(tableName: string): ColumnInfo[] {
     const safeName = tableName.replace(/"/g, '""');
     const stmt = this.db.prepare(`PRAGMA table_info("${safeName}")`);
-    return stmt.all() as ColumnInfo[];
+    return stmt.all() as unknown as ColumnInfo[];
   }
 
   getTableData(tableName: string, offset: number = 0, limit: number = 50): any[] {
@@ -61,13 +61,13 @@ export class DBService {
       } else {
         const stmt = this.db.prepare(sql);
         const info = stmt.run();
-        return { changes: info.changes };
+        return { changes: Number(info.changes) };
       }
     } catch (e: any) {
       return { error: e.message };
     }
   }
-  
+
   close() {
     this.db.close();
   }

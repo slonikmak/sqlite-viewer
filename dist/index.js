@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
+require("./suppress-experimental.js");
 const ink_1 = require("ink");
 const App_js_1 = __importDefault(require("./App.js"));
 const path_1 = __importDefault(require("path"));

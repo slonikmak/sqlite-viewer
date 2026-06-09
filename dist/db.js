@@ -1,19 +1,16 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DBService = void 0;
-const better_sqlite3_1 = __importDefault(require("better-sqlite3"));
+const node_sqlite_1 = require("node:sqlite");
 class DBService {
     db;
     constructor(dbPath) {
-        this.db = new better_sqlite3_1.default(dbPath, { readonly: false });
+        this.db = new node_sqlite_1.DatabaseSync(dbPath);
     }
     getTables() {
         const stmt = this.db.prepare(`
-      SELECT name, type 
-      FROM sqlite_master 
+      SELECT name, type
+      FROM sqlite_master
       WHERE type IN ('table', 'view') AND name NOT LIKE 'sqlite_%'
       ORDER BY name
     `);
@@ -47,7 +44,7 @@ class DBService {
             else {
                 const stmt = this.db.prepare(sql);
                 const info = stmt.run();
-                return { changes: info.changes };
+                return { changes: Number(info.changes) };
             }
         }
         catch (e) {
