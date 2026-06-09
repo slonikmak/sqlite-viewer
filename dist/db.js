@@ -1,11 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DBService = void 0;
-const node_sqlite_1 = require("node:sqlite");
-class DBService {
+import { DatabaseSync } from 'node:sqlite';
+export class DBService {
     db;
     constructor(dbPath) {
-        this.db = new node_sqlite_1.DatabaseSync(dbPath);
+        this.db = new DatabaseSync(dbPath);
     }
     getTables() {
         const stmt = this.db.prepare(`
@@ -55,4 +52,3 @@ class DBService {
         this.db.close();
     }
 }
-exports.DBService = DBService;

@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // Silence Node's "SQLite is an experimental feature" ExperimentalWarning emitted
 // by node:sqlite. Must be imported before any module that loads node:sqlite.
 const originalEmitWarning = process.emitWarning.bind(process);
@@ -11,3 +9,4 @@ process.emitWarning = ((warning, ...args) => {
     }
     return originalEmitWarning(warning, ...args);
 });
+export {};

@@ -1,14 +1,8 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = App;
-const jsx_runtime_1 = require("react/jsx-runtime");
-const react_1 = require("react");
-const ink_1 = require("ink");
-const ink_text_input_1 = __importDefault(require("ink-text-input"));
-const db_js_1 = require("./db.js");
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { useState, useEffect } from 'react';
+import { Box, Text, useInput, useApp } from 'ink';
+import TextInput from 'ink-text-input';
+import { DBService } from './db.js';
 const COLORS = {
     primary: '#00ff41',
     secondary: '#003b00',
@@ -18,32 +12,32 @@ const COLORS = {
     warning: '#ffb000',
     black: '#000000'
 };
-function App({ dbPath }) {
-    const { exit } = (0, ink_1.useApp)();
-    const [dbInstance, setDbInstance] = (0, react_1.useState)(null);
-    const [tables, setTables] = (0, react_1.useState)([]);
-    const [activePane, setActivePane] = (0, react_1.useState)('sidebar');
-    const [selectedTableIdx, setSelectedTableIdx] = (0, react_1.useState)(0);
+export default function App({ dbPath }) {
+    const { exit } = useApp();
+    const [dbInstance, setDbInstance] = useState(null);
+    const [tables, setTables] = useState([]);
+    const [activePane, setActivePane] = useState('sidebar');
+    const [selectedTableIdx, setSelectedTableIdx] = useState(0);
     // Data Grid State
-    const [tableData, setTableData] = (0, react_1.useState)([]);
-    const [columns, setColumns] = (0, react_1.useState)([]);
-    const [currentSchema, setCurrentSchema] = (0, react_1.useState)([]);
-    const [selectedRowIdx, setSelectedRowIdx] = (0, react_1.useState)(0);
-    const [offset, setOffset] = (0, react_1.useState)(0);
+    const [tableData, setTableData] = useState([]);
+    const [columns, setColumns] = useState([]);
+    const [currentSchema, setCurrentSchema] = useState([]);
+    const [selectedRowIdx, setSelectedRowIdx] = useState(0);
+    const [offset, setOffset] = useState(0);
     const limit = 50;
     // Console State
-    const [query, setQuery] = (0, react_1.useState)('');
-    const [queryResult, setQueryResult] = (0, react_1.useState)(null);
-    const [queryError, setQueryError] = (0, react_1.useState)(null);
-    const [queryHistory, setQueryHistory] = (0, react_1.useState)([]);
-    const [historyIdx, setHistoryIdx] = (0, react_1.useState)(-1);
-    const [isCustomQuery, setIsCustomQuery] = (0, react_1.useState)(false);
-    const [inputKey, setInputKey] = (0, react_1.useState)(0);
+    const [query, setQuery] = useState('');
+    const [queryResult, setQueryResult] = useState(null);
+    const [queryError, setQueryError] = useState(null);
+    const [queryHistory, setQueryHistory] = useState([]);
+    const [historyIdx, setHistoryIdx] = useState(-1);
+    const [isCustomQuery, setIsCustomQuery] = useState(false);
+    const [inputKey, setInputKey] = useState(0);
     // Initialization
-    (0, react_1.useEffect)(() => {
+    useEffect(() => {
         let database;
         try {
-            database = new db_js_1.DBService(dbPath);
+            database = new DBService(dbPath);
             setDbInstance(database);
             const tbls = database.getTables();
             setTables(tbls);
@@ -136,7 +130,7 @@ function App({ dbPath }) {
             suggestion = 'SELECT ';
         }
     }
-    (0, ink_1.useInput)((input, key) => {
+    useInput((input, key) => {
         if (input && input.toLowerCase() === 'q' && activePane !== 'console') {
             exit();
             return;
@@ -268,14 +262,14 @@ function App({ dbPath }) {
         setQuery('');
     };
     if (!dbInstance)
-        return (0, jsx_runtime_1.jsx)(ink_1.Text, { children: "Loading database..." });
+        return _jsx(Text, { children: "Loading database..." });
     const colWidth = Math.max(12, Math.floor(70 / (columns.length || 1)));
     const visibleRowCount = 12;
     const startRow = Math.max(0, selectedRowIdx - Math.floor(visibleRowCount / 2));
     const endRow = startRow + visibleRowCount;
     const visibleData = tableData.slice(startRow, endRow);
     const dbName = dbPath.split(/[/\\]/).pop();
-    return ((0, jsx_runtime_1.jsxs)(ink_1.Box, { flexDirection: "column", height: 26, padding: 1, children: [(0, jsx_runtime_1.jsxs)(ink_1.Box, { justifyContent: "space-between", marginBottom: 1, children: [(0, jsx_runtime_1.jsx)(ink_1.Text, { bold: true, color: COLORS.primary, children: dbName }), (0, jsx_runtime_1.jsxs)(ink_1.Text, { color: COLORS.muted, children: ["Tables: ", tables.length] })] }), (0, jsx_runtime_1.jsxs)(ink_1.Box, { flexDirection: "row", flexGrow: 1, children: [(0, jsx_runtime_1.jsxs)(ink_1.Box, { width: 25, flexDirection: "column", marginRight: 2, children: [(0, jsx_runtime_1.jsxs)(ink_1.Box, { borderBottom: true, borderStyle: "single", borderColor: COLORS.secondary, borderTop: false, borderLeft: false, borderRight: false, paddingBottom: 0, children: [(0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.muted, bold: true, children: "TABLES" }), activePane === 'sidebar' && (0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.primary, children: " [ACTIVE]" })] }), (0, jsx_runtime_1.jsx)(ink_1.Box, { flexDirection: "column", flexGrow: 1, marginTop: 1, children: tables.map((t, i) => {
+    return (_jsxs(Box, { flexDirection: "column", height: 26, padding: 1, children: [_jsxs(Box, { justifyContent: "space-between", marginBottom: 1, children: [_jsx(Text, { bold: true, color: COLORS.primary, children: dbName }), _jsxs(Text, { color: COLORS.muted, children: ["Tables: ", tables.length] })] }), _jsxs(Box, { flexDirection: "row", flexGrow: 1, children: [_jsxs(Box, { width: 25, flexDirection: "column", marginRight: 2, children: [_jsxs(Box, { borderBottom: true, borderStyle: "single", borderColor: COLORS.secondary, borderTop: false, borderLeft: false, borderRight: false, paddingBottom: 0, children: [_jsx(Text, { color: COLORS.muted, bold: true, children: "TABLES" }), activePane === 'sidebar' && _jsx(Text, { color: COLORS.primary, children: " [ACTIVE]" })] }), _jsx(Box, { flexDirection: "column", flexGrow: 1, marginTop: 1, children: tables.map((t, i) => {
                                     const isSelected = i === selectedTableIdx;
                                     let str = ` ≡ ${t.name}`;
                                     if (isSelected) {
@@ -284,25 +278,25 @@ function App({ dbPath }) {
                                     else {
                                         str = str.padEnd(25, ' ');
                                     }
-                                    return ((0, jsx_runtime_1.jsx)(ink_1.Box, { children: (0, jsx_runtime_1.jsx)(ink_1.Text, { backgroundColor: isSelected ? COLORS.primary : undefined, color: isSelected ? COLORS.black : COLORS.text, bold: isSelected, children: str }) }, t.name));
-                                }) }), (0, jsx_runtime_1.jsxs)(ink_1.Box, { flexDirection: "column", borderTop: true, borderStyle: "single", borderColor: COLORS.secondary, borderBottom: false, borderLeft: false, borderRight: false, paddingTop: 1, children: [(0, jsx_runtime_1.jsxs)(ink_1.Text, { color: COLORS.primary, children: [tables[selectedTableIdx]?.name, " schema"] }), (0, jsx_runtime_1.jsxs)(ink_1.Text, { color: COLORS.muted, wrap: "truncate", children: ["<", currentSchema.map(c => `${c.name} ${c.type}`).join(', '), ">"] })] })] }), (0, jsx_runtime_1.jsxs)(ink_1.Box, { flexGrow: 1, flexDirection: "column", borderLeft: true, borderStyle: "single", borderColor: activePane === 'data' ? COLORS.primary : COLORS.secondary, borderTop: false, borderBottom: false, borderRight: false, paddingLeft: 2, overflow: "hidden", children: [(0, jsx_runtime_1.jsxs)(ink_1.Box, { justifyContent: "space-between", marginBottom: 1, children: [(0, jsx_runtime_1.jsxs)(ink_1.Text, { color: COLORS.primary, bold: true, children: ["\u2637 Browsing: ", isCustomQuery ? 'Custom Query' : tables[selectedTableIdx]?.name] }), (0, jsx_runtime_1.jsxs)(ink_1.Text, { color: COLORS.muted, children: [tableData.length, " rows returned"] })] }), activePane === 'card' && tableData.length > 0 ? ((0, jsx_runtime_1.jsxs)(ink_1.Box, { flexDirection: "column", padding: 1, children: [(0, jsx_runtime_1.jsx)(ink_1.Text, { bold: true, color: COLORS.warning, children: "--- Row Details ---" }), columns.map(c => ((0, jsx_runtime_1.jsxs)(ink_1.Box, { marginTop: 1, flexDirection: "column", children: [(0, jsx_runtime_1.jsxs)(ink_1.Text, { bold: true, color: COLORS.primary, children: [c, ":"] }), (0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.text, children: String(tableData[selectedRowIdx][c] ?? 'NULL') })] }, c)))] })) : ((0, jsx_runtime_1.jsxs)(ink_1.Box, { flexDirection: "column", flexGrow: 1, children: [(0, jsx_runtime_1.jsx)(ink_1.Box, { flexDirection: "row", borderBottom: true, borderStyle: "single", borderColor: COLORS.secondary, borderTop: false, borderLeft: false, borderRight: false, children: columns.map(c => {
+                                    return (_jsx(Box, { children: _jsx(Text, { backgroundColor: isSelected ? COLORS.primary : undefined, color: isSelected ? COLORS.black : COLORS.text, bold: isSelected, children: str }) }, t.name));
+                                }) }), _jsxs(Box, { flexDirection: "column", borderTop: true, borderStyle: "single", borderColor: COLORS.secondary, borderBottom: false, borderLeft: false, borderRight: false, paddingTop: 1, children: [_jsxs(Text, { color: COLORS.primary, children: [tables[selectedTableIdx]?.name, " schema"] }), _jsxs(Text, { color: COLORS.muted, wrap: "truncate", children: ["<", currentSchema.map(c => `${c.name} ${c.type}`).join(', '), ">"] })] })] }), _jsxs(Box, { flexGrow: 1, flexDirection: "column", borderLeft: true, borderStyle: "single", borderColor: activePane === 'data' ? COLORS.primary : COLORS.secondary, borderTop: false, borderBottom: false, borderRight: false, paddingLeft: 2, overflow: "hidden", children: [_jsxs(Box, { justifyContent: "space-between", marginBottom: 1, children: [_jsxs(Text, { color: COLORS.primary, bold: true, children: ["\u2637 Browsing: ", isCustomQuery ? 'Custom Query' : tables[selectedTableIdx]?.name] }), _jsxs(Text, { color: COLORS.muted, children: [tableData.length, " rows returned"] })] }), activePane === 'card' && tableData.length > 0 ? (_jsxs(Box, { flexDirection: "column", padding: 1, children: [_jsx(Text, { bold: true, color: COLORS.warning, children: "--- Row Details ---" }), columns.map(c => (_jsxs(Box, { marginTop: 1, flexDirection: "column", children: [_jsxs(Text, { bold: true, color: COLORS.primary, children: [c, ":"] }), _jsx(Text, { color: COLORS.text, children: String(tableData[selectedRowIdx][c] ?? 'NULL') })] }, c)))] })) : (_jsxs(Box, { flexDirection: "column", flexGrow: 1, children: [_jsx(Box, { flexDirection: "row", borderBottom: true, borderStyle: "single", borderColor: COLORS.secondary, borderTop: false, borderLeft: false, borderRight: false, children: columns.map(c => {
                                             const innerWidth = colWidth - 1;
                                             let str = ` ${c}`;
                                             if (str.length > innerWidth)
                                                 str = str.substring(0, innerWidth - 1) + '…';
                                             str = str.padEnd(innerWidth, ' ');
-                                            return ((0, jsx_runtime_1.jsx)(ink_1.Box, { width: colWidth, borderRight: true, borderStyle: "single", borderColor: COLORS.secondary, borderTop: false, borderBottom: false, borderLeft: false, children: (0, jsx_runtime_1.jsx)(ink_1.Text, { bold: true, color: COLORS.text, children: str }) }, c));
+                                            return (_jsx(Box, { width: colWidth, borderRight: true, borderStyle: "single", borderColor: COLORS.secondary, borderTop: false, borderBottom: false, borderLeft: false, children: _jsx(Text, { bold: true, color: COLORS.text, children: str }) }, c));
                                         }) }), visibleData.map((row, i) => {
                                         const actualIdx = startRow + i;
                                         const isSelected = actualIdx === selectedRowIdx && activePane === 'data';
-                                        return ((0, jsx_runtime_1.jsx)(ink_1.Box, { flexDirection: "row", children: columns.map(c => {
+                                        return (_jsx(Box, { flexDirection: "row", children: columns.map(c => {
                                                 const innerWidth = colWidth - 1;
                                                 const rawVal = String(row[c] ?? 'NULL');
                                                 let str = ` ${rawVal}`;
                                                 if (str.length > innerWidth)
                                                     str = str.substring(0, innerWidth - 1) + '…';
                                                 str = str.padEnd(innerWidth, ' ');
-                                                return ((0, jsx_runtime_1.jsx)(ink_1.Box, { width: colWidth, borderRight: true, borderStyle: "single", borderColor: COLORS.secondary, borderTop: false, borderBottom: false, borderLeft: false, children: (0, jsx_runtime_1.jsx)(ink_1.Text, { backgroundColor: isSelected ? COLORS.primary : undefined, color: isSelected ? COLORS.black : COLORS.text, children: str }) }, c));
+                                                return (_jsx(Box, { width: colWidth, borderRight: true, borderStyle: "single", borderColor: COLORS.secondary, borderTop: false, borderBottom: false, borderLeft: false, children: _jsx(Text, { backgroundColor: isSelected ? COLORS.primary : undefined, color: isSelected ? COLORS.black : COLORS.text, children: str }) }, c));
                                             }) }, actualIdx));
-                                    })] }))] })] }), (0, jsx_runtime_1.jsxs)(ink_1.Box, { flexDirection: "column", marginTop: 1, borderStyle: "single", borderColor: activePane === 'console' ? COLORS.primary : COLORS.secondary, children: [(0, jsx_runtime_1.jsx)(ink_1.Box, { paddingX: 1, children: (0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.muted, bold: true, children: "SQL QUERY EDITOR" }) }), (0, jsx_runtime_1.jsxs)(ink_1.Box, { flexDirection: "row", paddingX: 1, children: [(0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.primary, bold: true, children: "\u03BB " }), (0, jsx_runtime_1.jsx)(ink_text_input_1.default, { value: query, onChange: setQuery, focus: activePane === 'console', onSubmit: handleConsoleSubmit }, inputKey), activePane === 'console' && suggestion && (0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.muted, children: suggestion })] })] }), (0, jsx_runtime_1.jsxs)(ink_1.Box, { flexDirection: "row", marginTop: 1, justifyContent: "space-between", children: [(0, jsx_runtime_1.jsxs)(ink_1.Box, { children: [(0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.primary, bold: true, children: "[Q] " }), (0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.text, children: "Quit  " }), (0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.primary, bold: true, children: "[Tab] " }), (0, jsx_runtime_1.jsxs)(ink_1.Text, { color: COLORS.text, children: [activePane === 'console' && suggestion ? 'Autocomplete' : 'Switch Pane', "  "] }), (0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.primary, bold: true, children: "[Enter] " }), (0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.text, children: "Select/Run  " }), (0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.primary, bold: true, children: "[Esc] " }), (0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.text, children: isCustomQuery ? 'Reset View' : 'Back' })] }), queryResult && (0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.primary, children: queryResult }), queryError && (0, jsx_runtime_1.jsx)(ink_1.Text, { color: COLORS.warning, children: queryError })] })] }));
+                                    })] }))] })] }), _jsxs(Box, { flexDirection: "column", marginTop: 1, borderStyle: "single", borderColor: activePane === 'console' ? COLORS.primary : COLORS.secondary, children: [_jsx(Box, { paddingX: 1, children: _jsx(Text, { color: COLORS.muted, bold: true, children: "SQL QUERY EDITOR" }) }), _jsxs(Box, { flexDirection: "row", paddingX: 1, children: [_jsx(Text, { color: COLORS.primary, bold: true, children: "\u03BB " }), _jsx(TextInput, { value: query, onChange: setQuery, focus: activePane === 'console', onSubmit: handleConsoleSubmit }, inputKey), activePane === 'console' && suggestion && _jsx(Text, { color: COLORS.muted, children: suggestion })] })] }), _jsxs(Box, { flexDirection: "row", marginTop: 1, justifyContent: "space-between", children: [_jsxs(Box, { children: [_jsx(Text, { color: COLORS.primary, bold: true, children: "[Q] " }), _jsx(Text, { color: COLORS.text, children: "Quit  " }), _jsx(Text, { color: COLORS.primary, bold: true, children: "[Tab] " }), _jsxs(Text, { color: COLORS.text, children: [activePane === 'console' && suggestion ? 'Autocomplete' : 'Switch Pane', "  "] }), _jsx(Text, { color: COLORS.primary, bold: true, children: "[Enter] " }), _jsx(Text, { color: COLORS.text, children: "Select/Run  " }), _jsx(Text, { color: COLORS.primary, bold: true, children: "[Esc] " }), _jsx(Text, { color: COLORS.text, children: isCustomQuery ? 'Reset View' : 'Back' })] }), queryResult && _jsx(Text, { color: COLORS.primary, children: queryResult }), queryError && _jsx(Text, { color: COLORS.warning, children: queryError })] })] }));
 }
