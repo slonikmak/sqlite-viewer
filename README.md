@@ -12,23 +12,21 @@ A beautiful, brutalist, and hacker-style Terminal UI for viewing and editing SQL
 
 ## Installation
 
-You can run this utility directly from GitHub using `npx` without installing it globally:
+> Requires **Node.js ≥ 22.5** — the viewer uses Node's built-in `node:sqlite`, so there is **no native module to compile** and nothing to build on install.
+
+Install it globally from GitHub:
 
 ```bash
-npx github:slonikmak/sqlite-viewer
+npm install -g "https://github.com/slonikmak/sqlite-viewer/archive/refs/heads/main.tar.gz"
 ```
 
-Or, manually specify the path to your database:
+Then run `sqlite-viewer` in any directory containing a database (see [Usage](#usage)).
 
-```bash
-npx github:slonikmak/sqlite-viewer ./path/to/database.db
-```
-
-Or, install it globally via `npm`:
-
-```bash
-npm install -g github:slonikmak/sqlite-viewer
-```
+> **Why the tarball URL and not `github:slonikmak/sqlite-viewer`?**
+> On some Windows / npm setups the `github:` shorthand performs a `git clone`
+> install that leaves the global package as a broken symlink into npm's cache
+> (so the `dist/` files appear "missing" and the command won't run). Installing
+> from the `…/archive/…tar.gz` URL extracts a normal package and works reliably.
 
 ## Usage
 
