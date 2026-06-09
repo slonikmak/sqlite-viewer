@@ -26,10 +26,17 @@ npm install -g github:your-username/sqlite-viewer
 
 ## Usage
 
-Start the viewer by passing the path to your SQLite database file:
+Simply run the tool in a directory containing your SQLite database:
 
 ```bash
-sqlite-viewer ./test.db
+sqlite-viewer
+```
+*(If there is only one `.db`, `.sqlite`, or `.sqlite3` file in the folder, it will be automatically opened!)*
+
+Or, manually specify the path to your database:
+
+```bash
+sqlite-viewer ./path/to/database.db
 ```
 
 ### Shortcuts
