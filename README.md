@@ -15,13 +15,19 @@ A beautiful, brutalist, and hacker-style Terminal UI for viewing and editing SQL
 You can run this utility directly from GitHub using `npx` without installing it globally:
 
 ```bash
-npx github:your-username/sqlite-viewer path/to/database.sqlite
+npx github:slonikmak/sqlite-viewer
+```
+
+Or, manually specify the path to your database:
+
+```bash
+npx github:slonikmak/sqlite-viewer ./path/to/database.db
 ```
 
 Or, install it globally via `npm`:
 
 ```bash
-npm install -g github:your-username/sqlite-viewer
+npm install -g github:slonikmak/sqlite-viewer
 ```
 
 ## Usage
